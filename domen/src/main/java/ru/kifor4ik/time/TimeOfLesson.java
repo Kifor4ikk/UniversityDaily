@@ -1,17 +1,17 @@
 package ru.kifor4ik.time;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+
+import java.sql.Time;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
+@ToString
 public class TimeOfLesson {
-
     private Long id;
-    private String timeStart;
-    private String timeEnd;
+    private int numberOfLesson;
+    private Time timeStart;
+    private Time timeEnd;
 }

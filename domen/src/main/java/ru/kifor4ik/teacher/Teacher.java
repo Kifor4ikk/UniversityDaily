@@ -1,19 +1,19 @@
 package ru.kifor4ik.teacher;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import ru.kifor4ik.group.Faculty;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
+@ToString
 public class Teacher {
 
     private Long id;
-    private String name;
+    private String firstName;
     private String secondName;
     //Name po batye
     private String thirdName;
+    private Faculty faculty;
 }
