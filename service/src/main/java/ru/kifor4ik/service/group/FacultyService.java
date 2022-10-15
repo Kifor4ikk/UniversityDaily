@@ -29,6 +29,14 @@ public class FacultyService {
         }
     }
 
+    public Faculty getById(Long id){
+        try{
+            return facultyRepository.getById(id);
+        } catch (Exception e){
+            throw new UpdateException("Get faculty exception", e.getLocalizedMessage(), "G000001");
+        }
+    }
+
     public List<Faculty> getFacultyByNameOrPartOfName(String name){
 
         try{
@@ -39,7 +47,7 @@ public class FacultyService {
 
             return facultyList;
         } catch (Exception e){
-            throw new GetException("Get faculty exception", e.getLocalizedMessage(), "G000001");
+            throw new GetException("Get faculty exception", e.getLocalizedMessage(), "G000002");
         }
     }
 

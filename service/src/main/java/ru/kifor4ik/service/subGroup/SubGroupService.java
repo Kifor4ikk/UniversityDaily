@@ -1,5 +1,6 @@
 package ru.kifor4ik.service.subGroup;
 
+import org.springframework.stereotype.Service;
 import ru.kifor4ik.exception.CreateException;
 import ru.kifor4ik.exception.GetException;
 import ru.kifor4ik.exception.SoftDeleteException;
@@ -7,6 +8,7 @@ import ru.kifor4ik.group.Course;
 import ru.kifor4ik.repository.subgroup.SubGroupRepository;
 import ru.kifor4ik.subgroup.SubGroup;
 
+@Service
 public class SubGroupService {
 
     private final SubGroupRepository subGroupRepository;
@@ -29,6 +31,14 @@ public class SubGroupService {
             return subGroupRepository.getById(id);
         } catch (Exception e){
             throw new GetException("Get subgroup exception", e.getLocalizedMessage(), "G00001");
+        }
+    }
+
+    public boolean update(SubGroup subGroup){
+        try{
+            return subGroupRepository.update(subGroup);
+        } catch (Exception e){
+            throw new GetException("Update subgroup exception", e.getLocalizedMessage(), "U00001");
         }
     }
 

@@ -1,5 +1,6 @@
 package ru.kifor4ik.service.time;
 
+import org.springframework.stereotype.Service;
 import ru.kifor4ik.exception.CreateException;
 import ru.kifor4ik.exception.GetException;
 import ru.kifor4ik.exception.SoftDeleteException;
@@ -9,6 +10,7 @@ import ru.kifor4ik.time.TimeOfLesson;
 import java.util.List;
 import java.util.Timer;
 
+@Service
 public class TimeService {
 
     private final TimeOfLessonRepository timeOfLessonRepository;

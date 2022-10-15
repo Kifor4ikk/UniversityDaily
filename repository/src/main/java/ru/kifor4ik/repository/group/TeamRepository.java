@@ -12,7 +12,7 @@ public interface TeamRepository {
     public boolean create(Team team);
 
     @Select("SELECT id as id, idCourse as idCourse, shortName as shortName, fullName as fullName FROM team WHERE id = #{id} AND isDeleted = false")
-    public Team get(Long id);
+    public Team getById(Long id);
 
     @Update("UPDATE team SET shortName = #{shortName}, fullName = #{fullName} RETURNING TRUE;")
     public boolean update(Team newTeam);

@@ -25,7 +25,7 @@ public interface TeacherRepository {
 
     @Update("UPDATE teacher SET firstName = #{firstName}, secondName = #{secondName}, thirdName = #{thirdName}," +
             " idFaculty = #{faculty.id} WHERE id = #{id} AND isDeleted = false RETURNING TRUE;")
-    public boolean update();
+    public boolean update(Teacher teacher);
 
     @Update("UPDATE teacher SET isDeleted = true WHERE id = #{id}")
     public boolean softDelete(Long id);

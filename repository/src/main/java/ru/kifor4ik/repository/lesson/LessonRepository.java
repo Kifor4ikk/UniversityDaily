@@ -23,19 +23,8 @@ public interface LessonRepository {
     )
     public boolean create(Lesson lesson);
 
-
     @Select("SELECT * from lesson WHERE id = #{id}  AND isDeleted = false")
-    public Lesson get(Long id);
-
-    @Update("UPDATE lesson SET fullName = #{fullName}, shortName = #{shortName}, classRoomNumber = #{classRoomNumber}," +
-            " optionalClassRoomNumber = #{optionalClassRoomNumber}, expandedInfo = #{expandedInfo}," +
-            " idFaculty = #{idFaculty},idCourse = #{idCourse}, idTeam = #{idTeam}, idTeacher = #{idTeacher}," +
-            "idSubGroup = #{idSubGroup}, idTimeOfLesson = #{idTimeOfLesson}, isOnlyGreen = #{isOnlyGreen}, isOnlyWhite = #{isOnlyWhite}" +
-            "dayOfWeek = #{dayOfWeek} RETURNING TRUE")
-    public boolean update(Lesson lesson);
-
-    @Update("UPDATE lesson SET isDeleted = true WHERE id = #{id}")
-    public void softDelete(Long id);
+    public Lesson getById(Long id);
 
     @Select("SELECT lesson.id FROM lesson WHERE idTeam = (SELECT id FROM team WHERE shortName = #{shortName}) AND DAYOFWEEK = #{dayOfWeek}")
     @Results(value = {@Result(property="id",column="id")})
@@ -73,5 +62,14 @@ public interface LessonRepository {
     @Results(value = {@Result(property="id",column="id")})
     public List<Long> findIdByTeamName(@Param("shortName") String teamShortName);
 
+    @Update("UPDATE lesson SET fullName = #{fullName}, shortName = #{shortName}, classRoomNumber = #{classRoomNumber}," +
+            " optionalClassRoomNumber = #{optionalClassRoomNumber}, expandedInfo = #{expandedInfo}," +
+            " idFaculty = #{idFaculty},idCourse = #{idCourse}, idTeam = #{idTeam}, idTeacher = #{idTeacher}," +
+            "idSubGroup = #{idSubGroup}, idTimeOfLesson = #{idTimeOfLesson}, isOnlyGreen = #{isOnlyGreen}, isOnlyWhite = #{isOnlyWhite}" +
+            "dayOfWeek = #{dayOfWeek} RETURNING TRUE")
+    public boolean update(Lesson lesson);
+
+    @Update("UPDATE lesson SET isDeleted = true WHERE id = #{id}")
+    public void softDelete(Long id);
 
 }
