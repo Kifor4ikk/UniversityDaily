@@ -2,12 +2,12 @@ package ru.kifor4ik.repository.lesson;
 
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import ru.kifor4ik.lesson.Lesson;
 
 import java.time.DayOfWeek;
 import java.util.List;
 
-@Component
 @Mapper
 public interface LessonRepository {
 

@@ -1,5 +1,6 @@
 package ru.kifor4ik.service.time;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.kifor4ik.exception.CreateException;
 import ru.kifor4ik.exception.GetException;
@@ -13,6 +14,7 @@ import java.util.Timer;
 @Service
 public class TimeService {
 
+    @Autowired
     private final TimeOfLessonRepository timeOfLessonRepository;
 
     public TimeService(TimeOfLessonRepository timeOfLessonRepository) {

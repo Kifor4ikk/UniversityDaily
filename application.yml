@@ -1,0 +1,13 @@
+
+server.port: 2001
+server.address: localhost
+
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:2000/UniversityDaily
+    username: postgres
+    password: 1
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher

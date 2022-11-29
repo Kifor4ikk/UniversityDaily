@@ -1,5 +1,6 @@
 package ru.kifor4ik.service.subGroup;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.kifor4ik.exception.CreateException;
 import ru.kifor4ik.exception.GetException;
@@ -13,6 +14,7 @@ public class SubGroupService {
 
     private final SubGroupRepository subGroupRepository;
 
+    @Autowired
     public SubGroupService(SubGroupRepository subGroupRepository) {
         this.subGroupRepository = subGroupRepository;
     }

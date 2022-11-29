@@ -1,6 +1,8 @@
 package ru.kifor4ik.repository.group;
 
 import org.apache.ibatis.annotations.*;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import ru.kifor4ik.group.Team;
 
 import java.util.List;

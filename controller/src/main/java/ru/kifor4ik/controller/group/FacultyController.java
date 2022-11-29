@@ -23,7 +23,7 @@ public class FacultyController {
 
     @ApiOperation("Создание")
     @PostMapping("/new")
-    public boolean create(String facultyShortName, String facultyFullName){
+    public boolean create(@RequestParam String facultyShortName, @RequestParam String facultyFullName){
         return facultyService.create(new Faculty(0L, facultyShortName, facultyFullName));
     }
 

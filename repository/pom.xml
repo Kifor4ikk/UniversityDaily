@@ -19,12 +19,10 @@
 
         <dependency>
             <groupId>ru.kifor4ik</groupId>
-            <artifactId>domen</artifactId>
+            <artifactId>domain</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
-
-
 
     </dependencies>
 </project>

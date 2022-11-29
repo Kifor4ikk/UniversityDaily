@@ -11,6 +11,7 @@ import ru.kifor4ik.service.group.CourseService;
 @RequestMapping("api/v3/course")
 public class CourseController {
 
+
     private final CourseService courseService;
 
     @Autowired

@@ -1,6 +1,8 @@
 package ru.kifor4ik.repository.group;
 
 import org.apache.ibatis.annotations.*;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import ru.kifor4ik.group.Faculty;
 
 import java.util.List;
@@ -21,7 +23,6 @@ public interface FacultyRepository {
     boolean softDelete(Long id);
 
     /**
-        @TODO
      Add kostil to service
      create string "%" + NAME + "%"
      */

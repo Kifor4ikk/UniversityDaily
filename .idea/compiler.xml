@@ -9,8 +9,8 @@
         <outputRelativeToContentRoot value="true" />
         <module name="controller" />
         <module name="repository" />
-        <module name="domen" />
         <module name="service" />
+        <module name="domain" />
       </profile>
     </annotationProcessing>
   </component>

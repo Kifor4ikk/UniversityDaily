@@ -4,6 +4,8 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import ru.kifor4ik.time.TimeOfLesson;
 
 import java.util.List;

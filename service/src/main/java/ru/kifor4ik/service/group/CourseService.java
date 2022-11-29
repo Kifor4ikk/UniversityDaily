@@ -1,5 +1,8 @@
 package ru.kifor4ik.service.group;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
 import ru.kifor4ik.exception.CreateException;
 import ru.kifor4ik.exception.GetException;
@@ -14,6 +17,7 @@ public class CourseService {
 
     private final CourseRepository courseRepository;
 
+    @Autowired
     public CourseService(CourseRepository courseRepository) {
         this.courseRepository = courseRepository;
     }

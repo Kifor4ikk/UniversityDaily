@@ -1,5 +1,6 @@
 package ru.kifor4ik.service.group;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.kifor4ik.exception.CreateException;
 import ru.kifor4ik.exception.GetException;
@@ -17,6 +18,7 @@ public class TeamService {
 
     private final TeamRepository teamRepository;
 
+    @Autowired
     public TeamService(TeamRepository teamRepository) {
         this.teamRepository = teamRepository;
     }

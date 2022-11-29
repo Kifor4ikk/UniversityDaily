@@ -8,19 +8,20 @@
     <artifactId>UniversityDaily</artifactId>
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
+
     <modules>
-        <module>domen</module>
+        <module>controller</module>
+        <module>domain</module>
         <module>repository</module>
         <module>service</module>
-        <module>Controller</module>
     </modules>
 
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
     </properties>
-    <dependencies>
 
+    <dependencies>
         <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-web -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -35,11 +36,19 @@
             <version>2.2.2</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.mybatis/mybatis -->
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis</artifactId>
+            <version>3.5.11</version>
+        </dependency>
+
         <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-boot-starter</artifactId>
             <version>3.0.0</version>
         </dependency>
+
         <!-- https://mvnrepository.com/artifact/io.springfox/springfox-swagger-ui -->
         <dependency>
             <groupId>io.springfox</groupId>
@@ -59,9 +68,11 @@
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
-            <version>7.5</version>
+            <version>7.6.1</version>
             <scope>test</scope>
         </dependency>
 
     </dependencies>
+
+
 </project>

@@ -1,5 +1,6 @@
 package ru.kifor4ik.service.teacher;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.kifor4ik.exception.CreateException;
 import ru.kifor4ik.exception.GetException;
@@ -21,6 +22,7 @@ public class TeacherService {
     private final TeacherRepository teacherRepository;
     private final FacultyService facultyService;
 
+    @Autowired
     public TeacherService(TeacherRepository teacherRepository, FacultyService facultyService) {
         this.teacherRepository = teacherRepository;
         this.facultyService = facultyService;

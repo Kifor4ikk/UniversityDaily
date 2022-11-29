@@ -2,12 +2,12 @@ package ru.kifor4ik.repository.teacher;
 
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import ru.kifor4ik.teacher.Teacher;
 
 import java.util.List;
 
 @Mapper
-@Component
 public interface TeacherRepository {
 
     @Insert("INSERT INTO teacher (firstName, secondName, thirdName, idFaculty) VALUES (#{firstName}, #{secondName}, #{thirdName}, #{faculty.id}) RETURNING TRUE;")
