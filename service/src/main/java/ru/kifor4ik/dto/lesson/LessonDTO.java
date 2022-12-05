@@ -11,6 +11,8 @@ import java.time.DayOfWeek;
 @ToString
 @Builder
 public class LessonDTO {
+
+    private Long id;
     private String shortName;
     private String fullName;
     //Just for class Room number

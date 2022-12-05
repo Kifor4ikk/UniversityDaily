@@ -21,30 +21,30 @@ public class TeamController {
 
     @ApiOperation("Создание")
     @PostMapping("/new")
-    public boolean create(Long idCourse, String shortName, String fullName){
+    public boolean create(@RequestParam Long idCourse,@RequestParam String shortName,@RequestParam String fullName){
         return teamService.create(new Team(0L, idCourse, shortName, fullName));
     }
 
     @ApiOperation("Очевидно что получение по ID")
     @GetMapping("findBy/id")
-    public Team getById(Long id){
+    public Team getById(@RequestParam Long id){
         return teamService.getById(id);
     }
 
     @ApiOperation("Выборка по частичному КОРОТКОМУ имени ФАКУЛЬТЕТА ")
     @GetMapping("findBy/facultyShortName")
-    public List<Team> getByFacultyShortName(String facultyShortName){
+    public List<Team> getByFacultyShortName(@RequestParam String facultyShortName){
         return teamService.getTeamByFacultyName(facultyShortName);
     }
 
     @ApiOperation("Выборка по частичному КОРОТКОМУ имени КОМАНДЫ")
     @GetMapping("findBy/teamShortName")
-    public List<Team> getByTeamShortName(String name){
+    public List<Team> getByTeamShortName(@RequestParam String name){
         return teamService.getTeamByNameOrPartOfName(name);
     }
 
     @DeleteMapping("/softDelete")
-    public boolean softDelete(Long id){
+    public boolean softDelete(@RequestParam Long id){
         return teamService.softDelete(id);
     }
 

@@ -4,7 +4,9 @@ import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import ru.kifor4ik.lesson.Lesson;
+import ru.kifor4ik.teacher.Teacher;
 
+import java.sql.Date;
 import java.time.DayOfWeek;
 import java.util.List;
 
@@ -15,15 +17,15 @@ public interface LessonRepository {
         "INSERT INTO lesson(" +
                 " fullname, shortname, classroomnumber, optionalclassroomnumber," +
                 " optional, expandedinfo, idfaculty, idcourse, idteam, idteacher, idsubgroup," +
-                "idtimeoflesson, isonlygreen, isonlywhite, dayofweek)" +
-                " VALUES (#{fullName},#{shortName},#{classRoomNumber}, #{optionalClassRoomNumber}," +
-                " #{optional}, #{expandedInfo}, #{idFaculty}, #{idCourse}," +
-                " #{idTeam}, #{idTeacher}, #{idSubGroup}, #{idTimeOfLesson}," +
-                " #{isOnlyGreen}, #{isOnlyWhite}, #{dayOfWeek}) RETURNING TRUE"
+                " idtimeoflesson, isonlygreen, isonlywhite, dayofweek, createDate, createdBy)" +
+                " VALUES (#{lesson.fullName},#{lesson.shortName},#{lesson.classRoomNumber}, #{lesson.optionalClassRoomNumber}," +
+                " #{lesson.optional}, #{lesson.expandedInfo}, #{lesson.idFaculty}, #{lesson.idCourse}," +
+                " #{lesson.idTeam}, #{lesson.idTeacher}, #{lesson.idSubGroup}, #{lesson.idTimeOfLesson}," +
+                " #{lesson.isOnlyGreen}, #{lesson.isOnlyWhite}, #{lesson.dayOfWeek}, #{createDate}, #{createBy}) RETURNING TRUE"
     )
-    public boolean create(Lesson lesson);
+    public boolean create(@Param("lesson") Lesson lesson, @Param("createDate") Date createDate,@Param("createBy") String createBy);
 
-    @Select("SELECT * from lesson WHERE id = #{id}  AND isDeleted = false")
+    @Select("SELECT * from lesson WHERE id = #{id} AND isDeleted = false")
     public Lesson getById(Long id);
 
     @Select("SELECT lesson.id FROM lesson WHERE idTeam = (SELECT id FROM team WHERE shortName = #{shortName}) AND DAYOFWEEK = #{dayOfWeek}")
@@ -58,6 +60,15 @@ public interface LessonRepository {
     @Results(value = {@Result(property="id",column="id")})
     public List<Long> findIdByTeamNameAndSubGroup(@Param("shortName") String teamShortName, @Param("groupNumber") int subGroupNumber);
 
+    @Select("SELECT * FROM lesson WHERE" +
+            " idTeam = (SELECT id FROM team WHERE shortName = #{shortName}) AND " +
+            " dayOfWeek = #{dayOfWeek} AND (" +
+            " idSubGroup = (SELECT id FROM subGroup WHERE numberOfSubGroup = 0) or" +
+            " idSubGroup = (SELECT id FROM subGroup WHERE numberOfSubGroup = #{groupNumber}))")
+    @Results(value = {@Result(property="id",column="id")})
+    public List<Long> findIdByTeamNameAndSubGroupAndDay(@Param("shortName") String teamShortName,
+                                                        @Param("groupNumber") int subGroupNumber, @Param("dayOfWeek") String dayOfWeek);
+
     @Select("SELECT * FROM lesson WHERE idTeam = (SELECT id FROM team WHERE shortName = #{shortName})")
     @Results(value = {@Result(property="id",column="id")})
     public List<Long> findIdByTeamName(@Param("shortName") String teamShortName);
@@ -69,7 +80,28 @@ public interface LessonRepository {
             "dayOfWeek = #{dayOfWeek} RETURNING TRUE")
     public boolean update(Lesson lesson);
 
-    @Update("UPDATE lesson SET isDeleted = true WHERE id = #{id}")
-    public void softDelete(Long id);
+    @Update("UPDATE lesson SET isDeleted = true, deleteDate = #{deleteDate}, deletedBy = #{deletedBy} WHERE id = #{id} RETURNING TRUE;")
+    public boolean softDelete(@Param("id") Long id, @Param("deleteDate")Date deleteDate, @Param("deletedBy") String deletedBy);
 
+    @Select("SELECT COUNT (*) FROM lesson WHERE " +
+            "fullname = #{fullName} and " +
+            "shortName = #{shortName} and " +
+            "classRoomNumber = #{classRoomNumber} and " +
+            "optionalClassRoomNumber = #{optionalClassRoomNumber} and " +
+            "optional = #{optional} and " +
+            "expandedInfo = #{expandedInfo} and " +
+            "idFaculty = #{idFaculty} and " +
+            "idCourse = #{idCourse} and " +
+            "idTeam = #{idTeam} and " +
+            "idTeacher = #{idTeacher} and " +
+            "idSubGroup = #{idSubGroup} and " +
+            "idTimeOfLesson = #{idTimeOfLesson} and " +
+            "isOnlyGreen = #{isOnlyGreen} and " +
+            "isOnlyWhite = #{isOnlyWhite} and " +
+            "dayOfWeek = #{dayOfWeek} and " +
+            "isDeleted = false")
+    public Long doesExistSame(Lesson lesson);
+
+    @Select("SELECT COUNT (*) FROM lesson WHERE id = #{id} and isDeleted = false")
+    public Long doesItExists(Long id);
 }

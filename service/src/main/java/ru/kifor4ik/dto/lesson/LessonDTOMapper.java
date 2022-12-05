@@ -12,6 +12,7 @@ public class LessonDTOMapper {
     public LessonDTO lessonToDTO(Lesson lesson, Teacher teacher, TimeOfLesson time, SubGroup subGroup) {
 
         return LessonDTO.builder()
+                .id(lesson.getId())
                 .shortName(lesson.getShortName())
                 .fullName(lesson.getFullName())
                 .classRoomNumber(lesson.getClassRoomNumber())

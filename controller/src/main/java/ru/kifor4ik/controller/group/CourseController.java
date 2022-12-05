@@ -21,19 +21,19 @@ public class CourseController {
 
     @ApiOperation("Создание. названия переменных говорят сами за себя")
     @PostMapping("/new")
-    public boolean create(Long idFaculty, int courseNumber){
+    public boolean create(@RequestParam Long idFaculty, @RequestParam Integer courseNumber){
         return courseService.create(new Course(0L, idFaculty,courseNumber));
     }
 
     @ApiOperation("Поиск по ИДшке")
     @GetMapping("/findBy/id")
-    public Course getById(Long id){
+    public Course getById(@RequestParam Long id){
         return courseService.getById(id);
     }
 
     @ApiOperation("Мягчайшее удаление")
     @DeleteMapping("/softDelete")
-    public boolean softDelete(Long id){
+    public boolean softDelete(@RequestParam Long id){
         return courseService.softDelete(id);
     }
 }

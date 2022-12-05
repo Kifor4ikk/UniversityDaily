@@ -29,25 +29,25 @@ public class FacultyController {
 
     @ApiOperation("Поиск по ID.")
     @GetMapping("/findBy/id")
-    public Faculty getById(Long id){
+    public Faculty getById(@RequestParam Long id){
         return facultyService.getById(id);
     }
 
     @ApiOperation("Поиск по частичному/полному имени.")
     @GetMapping("/findBy/partOfName")
-    public List<Faculty> getById(String name){
+    public List<Faculty> getById(@RequestParam String name){
         return facultyService.getFacultyByNameOrPartOfName(name);
     }
 
     @ApiOperation("Обновление информации. Айдишка тут обязательна")
     @PutMapping("/update")
-    public boolean update(Faculty faculty){
+    public boolean update(@RequestBody Faculty faculty){
         return facultyService.update(faculty);
     }
 
     @ApiOperation("Мягкое удаление. Тут нужна только айдишка, остальные поля можно пустыми")
     @DeleteMapping("/softDelete")
-    public boolean softDelete(Faculty faculty){
-        return facultyService.update(faculty);
+    public boolean softDelete(@RequestParam Long id){
+        return facultyService.softDelete(id);
     }
 }

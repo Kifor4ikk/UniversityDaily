@@ -17,25 +17,25 @@ public class SubGroupController {
 
     @ApiOperation("Создание. Валидации описания никакой. Кстати номер группы может быть и миллионный)")
     @PostMapping("/new")
-    public boolean create(int subGroupNumber, String description){
+    public boolean create(@RequestParam Integer subGroupNumber, @RequestParam String description){
         return subGroupService.create(new SubGroup(0L, subGroupNumber, description));
     }
 
     @ApiOperation("Поиск по айди")
     @GetMapping("/findBy/id")
-    public SubGroup getById(Long id){
+    public SubGroup getById(@RequestParam Long id){
         return subGroupService.getById(id);
     }
 
     @ApiOperation("Обновление. Меняй че хочешь.")
     @PutMapping("/update")
-    public boolean update(SubGroup subGroup){
+    public boolean update(@RequestBody SubGroup subGroup){
         return subGroupService.update(subGroup);
     }
 
     @ApiOperation("Удаляем мягко")
     @DeleteMapping("/softDelete")
-    public boolean softDelete(Long id){
+    public boolean softDelete(@RequestParam Long id){
         return subGroupService.softDelete(id);
     }
 

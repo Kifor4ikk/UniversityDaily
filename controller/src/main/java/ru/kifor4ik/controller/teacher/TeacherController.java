@@ -22,35 +22,34 @@ public class TeacherController {
 
     @ApiOperation("Создание. Все имена нормализуются в форму из 'иМя' в 'Имя'")
     @PostMapping("/new")
-    public boolean create(String firstName, String secondName, String thirdName, Long idFaculty){
+    public boolean create(@RequestParam String firstName,@RequestParam String secondName,@RequestParam String thirdName,@RequestParam Long idFaculty){
         return teacherService.create(new Teacher(0L, nameNormalizer(firstName), nameNormalizer(secondName), nameNormalizer(thirdName),
                 new Faculty(idFaculty, "", "")));
     }
 
     @ApiOperation("Поиск по ID")
     @GetMapping("findBy/id")
-    public Teacher getById(Long id){
+    public Teacher getById(@RequestParam Long id){
         return teacherService.getById(id);
     }
 
     @ApiOperation("Поиск по частичному совпадению любой из частей ФИО")
     @GetMapping("findBy/FIO")
-    public List<Teacher> getByPartOfFIO(String name){
+    public List<Teacher> getByPartOfFIO(@RequestParam String name){
         return teacherService.getByPartOfFIO(name);
     }
 
     @ApiOperation("Изменение параметров учителя")
     @PutMapping("/update")
-    public boolean update(Teacher teacher){
+    public boolean update(@RequestBody Teacher teacher){
         return teacherService.update(teacher);
     }
 
     @ApiOperation("УВОЛЬНЕНИЕ (мякость удаления)")
     @DeleteMapping("/softDelete")
-    public boolean softDelete(Long id){
+    public boolean softDelete(@RequestParam Long id){
         return teacherService.softDelete(id);
     }
-
 
     public String nameNormalizer(String name){
         return name.toUpperCase(Locale.ROOT).charAt(0) + name.toLowerCase(Locale.ROOT).substring(1);

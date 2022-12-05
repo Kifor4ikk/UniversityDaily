@@ -4,18 +4,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.kifor4ik.dto.lesson.LessonDTO;
 import ru.kifor4ik.dto.lesson.LessonDTOMapper;
-import ru.kifor4ik.exception.CreateException;
-import ru.kifor4ik.exception.GetException;
-import ru.kifor4ik.exception.SoftDeleteException;
+import ru.kifor4ik.exception.*;
 import ru.kifor4ik.group.Team;
 import ru.kifor4ik.lesson.Lesson;
+import ru.kifor4ik.repository.group.CourseRepository;
+import ru.kifor4ik.repository.group.FacultyRepository;
+import ru.kifor4ik.repository.group.TeamRepository;
 import ru.kifor4ik.repository.lesson.LessonRepository;
+import ru.kifor4ik.service.group.TeamService;
 import ru.kifor4ik.service.subGroup.SubGroupService;
 import ru.kifor4ik.service.teacher.TeacherService;
 import ru.kifor4ik.service.time.TimeService;
 import ru.kifor4ik.time.TimeOfLesson;
 
+import java.sql.Date;
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,25 +27,48 @@ import java.util.List;
 public class LessonService {
 
     private final LessonRepository lessonRepository;
+
+
     private final SubGroupService subGroupService;
     private final TeacherService teacherService;
     private final TimeService timeService;
     private final LessonDTOMapper lessonDTOMapper = new LessonDTOMapper();
 
+    private final FacultyRepository facultyRepository;
+    private final CourseRepository courseRepository;
+    private final TeamRepository teamRepository;
+
     @Autowired
-    public LessonService(LessonRepository lessonRepository, SubGroupService subGroupService, TeacherService teacherService, TimeService timeService) {
+    public LessonService(LessonRepository lessonRepository, SubGroupService subGroupService, TeacherService teacherService,
+                         TimeService timeService, FacultyRepository facultyRepository,
+                         CourseRepository courseRepository, TeamRepository teamRepository) {
         this.lessonRepository = lessonRepository;
         this.subGroupService = subGroupService;
         this.teacherService = teacherService;
         this.timeService = timeService;
+        this.facultyRepository = facultyRepository;
+        this.courseRepository = courseRepository;
+        this.teamRepository = teamRepository;
     }
 
     public boolean create(Lesson lesson) {
         try {
-            lessonRepository.create(lesson);
+
+            if(facultyRepository.doesItExists(lesson.getIdFaculty()) == 0)
+                throw new NotExistException("Faculty not exist", "Cant create Lesson cause current FACULTY not exist", "LC10");
+            if(courseRepository.doesItExists(lesson.getIdCourse()) == 0)
+                throw new NotExistException("Course not exist", "Cant create Lesson cause current COURSE not exist", "LC11");
+            if(teamRepository.doesItExists(lesson.getIdTeam()) == 0)
+                throw new NotExistException("Team not exist", "Cant create Lesson cause current TEAM not exist", "LC12");
+            if(!teacherService.doesItExists(lesson.getIdTeacher()))
+                throw new NotExistException("Faculty not exist", "Cant create Lesson cause current faculty not exist", "LC13");
+            if(lessonRepository.doesExistSame(lesson) != 0)
+                throw new AlreadyExistException("AlreadyExists", "Same lesson already exists", "LC14");
+
+            lessonRepository.create(lesson,Date.valueOf(LocalDate.now()),"UNDEFINED");
             return true;
         } catch (Exception e) {
-            throw new CreateException("Create lesson exception", e.getLocalizedMessage(), "C000001");
+            throw new CreateException("Create lesson exception", e.getLocalizedMessage(), "LC15");
         }
     }
 
@@ -55,7 +82,7 @@ public class LessonService {
                     subGroupService.getById(lessonTemp.getIdSubGroup())
             );
         } catch (Exception e) {
-            throw new GetException("Get lesson service exception", e.getLocalizedMessage(), "G000001");
+            throw new GetException("Get lesson service exception", e.getLocalizedMessage(), "LG10");
         }
     }
 
@@ -67,7 +94,7 @@ public class LessonService {
             return lessonList;
 
         } catch (Exception e) {
-            throw new GetException("Get lesson service exception", e.getLocalizedMessage(), "G000002");
+            throw new GetException("Get lesson service exception", e.getLocalizedMessage(), "LG11");
         }
     }
 
@@ -79,7 +106,7 @@ public class LessonService {
             return lessonList;
 
         } catch (Exception e) {
-            throw new GetException("Get lesson service exception", e.getLocalizedMessage(), "G000003");
+            throw new GetException("Get lesson service exception", e.getLocalizedMessage(), "LG12");
         }
     }
 
@@ -91,7 +118,7 @@ public class LessonService {
             return lessonList;
 
         } catch (Exception e) {
-            throw new GetException("Get lesson service exception", e.getLocalizedMessage(), "G000004");
+            throw new GetException("Get lesson service exception", e.getLocalizedMessage(), "LG13");
         }
     }
 
@@ -103,7 +130,7 @@ public class LessonService {
             return lessonList;
 
         } catch (Exception e) {
-            throw new GetException("Get lesson service exception", e.getLocalizedMessage(), "G000005");
+            throw new GetException("Get lesson service exception", e.getLocalizedMessage(), "LG14");
         }
     }
 
@@ -115,10 +142,21 @@ public class LessonService {
             return lessonList;
 
         } catch (Exception e) {
-            throw new GetException("Get lesson service exception", e.getLocalizedMessage(), "G000006");
+            throw new GetException("Get lesson service exception", e.getLocalizedMessage(), "LG15");
         }
     }
 
+    public List<LessonDTO> getByTeamShortNameAndSubGroupNumberAndDay(String shortName, int subGroupNumber, String day) {
+        try {
+            List<LessonDTO> lessonList = new ArrayList<>();
+            lessonRepository.findIdByTeamNameAndSubGroupAndDay(shortName, subGroupNumber,day)
+                    .forEach(id -> lessonList.add(getById(id)));
+            return lessonList;
+
+        } catch (Exception e) {
+            throw new GetException("Get lesson service exception", e.getLocalizedMessage(), "LG15");
+        }
+    }
     public List<LessonDTO> getByTeamShortNameAndOnlyGreenAndGeneral(String shortName) {
         try {
             List<LessonDTO> lessonList = new ArrayList<>();
@@ -127,7 +165,7 @@ public class LessonService {
             return lessonList;
 
         } catch (Exception e) {
-            throw new GetException("Get lesson service exception", e.getLocalizedMessage(), "G000007");
+            throw new GetException("Get lesson service exception", e.getLocalizedMessage(), "LG16");
         }
     }
 
@@ -139,7 +177,7 @@ public class LessonService {
             return lessonList;
 
         } catch (Exception e) {
-            throw new GetException("Get lesson service exception", e.getLocalizedMessage(), "G000008");
+            throw new GetException("Get lesson service exception", e.getLocalizedMessage(), "LG17");
         }
     }
 
@@ -151,7 +189,7 @@ public class LessonService {
             return lessonList;
 
         } catch (Exception e) {
-            throw new GetException("Get lesson service exception", e.getLocalizedMessage(), "G000008");
+            throw new GetException("Get lesson service exception", e.getLocalizedMessage(), "LG18");
         }
     }
 
@@ -160,16 +198,16 @@ public class LessonService {
             lessonRepository.update(lesson);
             return true;
         } catch (Exception e) {
-            throw new GetException("Update lesson service exception", e.getLocalizedMessage(), "U000001");
+            throw new GetException("Update lesson service exception", e.getLocalizedMessage(), "LU19");
         }
     }
 
     public boolean softDelete(Long id) {
         try {
-            lessonRepository.softDelete(id);
+            lessonRepository.softDelete(id, Date.valueOf(LocalDate.now()),"UNDEFINED");
             return true;
         } catch (Exception e) {
-            throw new SoftDeleteException("Soft delete lesson service exception", e.getLocalizedMessage(), "SD000001");
+            throw new SoftDeleteException("Soft delete lesson service exception", e.getLocalizedMessage(), "LD10");
         }
     }
 }
