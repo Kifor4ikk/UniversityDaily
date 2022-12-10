@@ -11,6 +11,7 @@ import ru.kifor4ik.repository.group.CourseRepository;
 import ru.kifor4ik.repository.group.FacultyRepository;
 import ru.kifor4ik.repository.group.TeamRepository;
 import ru.kifor4ik.repository.lesson.LessonRepository;
+import ru.kifor4ik.room.Room;
 import ru.kifor4ik.service.group.TeamService;
 import ru.kifor4ik.service.subGroup.SubGroupService;
 import ru.kifor4ik.service.teacher.TeacherService;
@@ -22,6 +23,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class LessonService {
@@ -179,6 +181,46 @@ public class LessonService {
         } catch (Exception e) {
             throw new GetException("Get lesson service exception", e.getLocalizedMessage(), "LG17");
         }
+    }
+
+    public List<LessonDTO> getByTeamShortNameAndSubGroupNumberAndDayAndGreenOrWhiteAndGeneral(String shortName,
+                                                                                              int subGroupNumber, String day, Boolean isGreen) {
+        try {
+            List<LessonDTO> lessonList = new ArrayList<>();
+            lessonRepository.findIdByTeamNameAndSubGroupAndDayAndOnlyGreenOrGeneral(shortName, subGroupNumber,day, isGreen)
+                    .forEach(id -> lessonList.add(getById(id)));
+            return lessonList;
+
+        } catch (Exception e) {
+            throw new GetException("Get lesson service exception", e.getLocalizedMessage(), "LG18");
+        }
+    }
+    public List<LessonDTO> getByTeamShortNameAndSubGroupNumberAndDayAndGreenOrWhiteAndGeneral(Long teacherId, String day, Boolean isGreen) {
+        try {
+            List<LessonDTO> lessonList = new ArrayList<>();
+            lessonRepository.findIdByTeacherIdAndDayAndOnlyGreenOrGeneral(teacherId,day, isGreen)
+                    .forEach(id -> lessonList.add(getById(id)));
+            return lessonList;
+
+        } catch (Exception e) {
+            throw new GetException("Get lesson service exception", e.getLocalizedMessage(), "LG18");
+        }
+    }
+
+    public List<LessonDTO> getByRoomParamAndDayAndGreenOrWhiteAndGeneral(int classRoomNumber, String optional, String day, Boolean isGreen) {
+        try {
+            List<LessonDTO> lessonList = new ArrayList<>();
+            lessonRepository.findIdByRoomParamAndDayAndOnlyGreenOrGeneral(classRoomNumber, optional, day, isGreen)
+                    .forEach(id -> lessonList.add(getById(id)));
+            return lessonList;
+
+        } catch (Exception e) {
+            throw new GetException("Get lesson service exception", e.getLocalizedMessage(), "LG18");
+        }
+    }
+
+    public List<Room> getAllRooms(){
+        return lessonRepository.findAllRooms();
     }
 
     public List<LessonDTO> getByTeamName(String shortName) {

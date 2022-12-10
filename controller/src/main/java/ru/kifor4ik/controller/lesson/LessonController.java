@@ -1,16 +1,15 @@
 package ru.kifor4ik.controller.lesson;
 
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.bind.annotation.*;
 import ru.kifor4ik.dto.lesson.LessonDTO;
 import ru.kifor4ik.lesson.Lesson;
+import ru.kifor4ik.room.Room;
 import ru.kifor4ik.service.lesson.LessonService;
-
 import java.time.DayOfWeek;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("api/v3/lesson")
@@ -71,12 +70,38 @@ public class LessonController {
         return lessonService.getByTeamShortNameAndSubGroupNumber(name, subGroupNumber);
     }
 
+
     @ApiOperation("Поиск по короткому ПОЛНОМУ имени и номеру подгруппы, ВС-19 0 MONDAY")
     @GetMapping("findBy/fullShortNameAndSubGroupNumberAndDayOfWeek")
     public List<LessonDTO> getByTeamShortNameAndSubGroupNumber(@RequestParam String name,
                                                                @RequestParam Integer subGroupNumber,
                                                                @RequestParam String dayOfWeek){
         return lessonService.getByTeamShortNameAndSubGroupNumberAndDay(name, subGroupNumber,dayOfWeek);
+    }
+    @ApiOperation("Поиск по короткому ПОЛНОМУ имени и номеру подгруппы, ВС-19 0 MONDAY 1/2/3 TRUE(зеленые)/false(белые)")
+    @GetMapping("findBy/fullShortNameAndSubGroupNumberAndDayOfWeekAndGreenOrWhiteAndGeneral")
+    public List<LessonDTO> getByTeamShortNameAndSubGroupNumber(@RequestParam String name,
+                                                               @RequestParam Integer subGroupNumber,
+                                                               @RequestParam String dayOfWeek,
+                                                               @RequestParam Boolean isGreen){
+        return lessonService.getByTeamShortNameAndSubGroupNumberAndDayAndGreenOrWhiteAndGeneral(name, subGroupNumber,dayOfWeek, isGreen);
+    }
+
+    @ApiOperation("Поиск по id учителя и друним парамам, 1 0 MONDAY TRUE(зеленые)/false(белые)")
+    @GetMapping("findBy/teacherIdAndDayOfWeekAndGreenOrWhiteAndGeneral")
+    public List<LessonDTO> getByTeamShortNameAndSubGroupNumber(@RequestParam Long teacherId,
+                                                               @RequestParam String dayOfWeek,
+                                                               @RequestParam Boolean isGreen){
+        return lessonService.getByTeamShortNameAndSubGroupNumberAndDayAndGreenOrWhiteAndGeneral(teacherId,dayOfWeek, isGreen);
+    }
+
+    @ApiOperation("Поиск по аудитории и её доп инфе., 206 Г MONDAY TRUE(зеленые)/false(белые)")
+    @GetMapping("findBy/roomNumberAndRoomOptionalAndDayOfWeekAndGreenOrWhiteAndGeneral")
+    public List<LessonDTO> getByRoomParamAndDayAndGreenOrWhiteAndGeneral(@RequestParam Integer roomNumber,
+                                                               @RequestParam String roomOptional,
+                                                               @RequestParam String dayOfWeek,
+                                                               @RequestParam Boolean isGreen){
+        return lessonService.getByRoomParamAndDayAndGreenOrWhiteAndGeneral(roomNumber, roomOptional,dayOfWeek, isGreen);
     }
 
     @ApiOperation("Поиск по короткомУ ПОЛНОМУ имени, но только ЗЕЛЕНАЯ неделя + общие пары")
@@ -89,6 +114,12 @@ public class LessonController {
     @GetMapping("findBy/teamNameAndOnlyWhite")
     public List<LessonDTO> getByTeamShortNameAndOnlyWhite(@RequestParam String name){
         return lessonService.getByTeamShortNameAndOnlyWhiteAndGeneral(name);
+    }
+
+    @ApiOperation("Все комнатки для бездомных поросят")
+    @GetMapping("list/rooms")
+    public List<Room> getAllRooms(){
+        return lessonService.getAllRooms();
     }
 
     @ApiOperation("Обновление инфы")

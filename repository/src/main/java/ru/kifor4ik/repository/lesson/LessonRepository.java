@@ -4,11 +4,13 @@ import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import ru.kifor4ik.lesson.Lesson;
+import ru.kifor4ik.room.Room;
 import ru.kifor4ik.teacher.Teacher;
 
 import java.sql.Date;
 import java.time.DayOfWeek;
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface LessonRepository {
@@ -69,10 +71,42 @@ public interface LessonRepository {
     public List<Long> findIdByTeamNameAndSubGroupAndDay(@Param("shortName") String teamShortName,
                                                         @Param("groupNumber") int subGroupNumber, @Param("dayOfWeek") String dayOfWeek);
 
+    @Select("SELECT * FROM lesson WHERE idTeam = (SELECT id FROM team WHERE shortName = #{shortName}) " +
+            "AND dayOfWeek = #{dayOfWeek} " +
+            "AND (idSubGroup = (SELECT id FROM subGroup WHERE numberOfSubGroup = 0) " +
+            "   or idSubGroup = (SELECT id FROM subGroup WHERE numberOfSubGroup = #{groupNumber})) " +
+            "AND (isOnlyGreen = 'true' AND isOnlyWhite = true or isOnlyGreen = #{isOnlyGreen})")
+    @Results(value = {@Result(property="id",column="id")})
+    public List<Long> findIdByTeamNameAndSubGroupAndDayAndOnlyGreenOrGeneral(@Param("shortName") String teamShortName,
+                                                        @Param("groupNumber") int subGroupNumber,
+                                                        @Param("dayOfWeek") String dayOfWeek,
+                                                        @Param("isOnlyGreen") boolean isOnlyGreen);
+
+    @Select("SELECT * FROM lesson WHERE classRoomNumber = #{roomNumber} AND optionalClassRoomNumber = #{roomOptional} " +
+            "AND dayOfWeek = #{dayOfWeek} " +
+            "AND (isOnlyGreen = 'true' AND isOnlyWhite = true or isOnlyGreen = #{isOnlyGreen})")
+    public List<Long> findIdByRoomParamAndDayAndOnlyGreenOrGeneral(@Param("roomNumber") Integer roomNumber,
+                                                                  @Param("roomOptional") String roomOptional,
+                                                                  @Param("dayOfWeek") String dayOfWeek,
+                                                                  @Param("isOnlyGreen") boolean isOnlyGreen);
+
+    @Select("SELECT DISTINCT classRoomNumber, optionalClassRoomNumber from LESSON")
+    @Results(value = {@Result(property="roomNumber",column="classRoomNumber"),
+            @Result(property="roomOptional",column="optionalClassRoomNumber")})
+    public List<Room> findAllRooms();
+
     @Select("SELECT * FROM lesson WHERE idTeam = (SELECT id FROM team WHERE shortName = #{shortName})")
     @Results(value = {@Result(property="id",column="id")})
     public List<Long> findIdByTeamName(@Param("shortName") String teamShortName);
 
+
+    @Select("SELECT * FROM lesson WHERE idTeacher = #{teacherId} " +
+            "AND dayOfWeek = #{dayOfWeek} " +
+            "AND (isOnlyGreen = 'true' AND isOnlyWhite = true or isOnlyGreen = #{isOnlyGreen})")
+    @Results(value = {@Result(property="id",column="id")})
+    public List<Long> findIdByTeacherIdAndDayAndOnlyGreenOrGeneral(@Param("teacherId") Long teacherId,
+                                                                             @Param("dayOfWeek") String dayOfWeek,
+                                                                             @Param("isOnlyGreen") boolean isOnlyGreen);
     @Update("UPDATE lesson SET fullName = #{fullName}, shortName = #{shortName}, classRoomNumber = #{classRoomNumber}," +
             " optionalClassRoomNumber = #{optionalClassRoomNumber}, expandedInfo = #{expandedInfo}," +
             " idFaculty = #{idFaculty},idCourse = #{idCourse}, idTeam = #{idTeam}, idTeacher = #{idTeacher}," +
